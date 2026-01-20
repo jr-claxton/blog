@@ -21,6 +21,7 @@ export interface PostData {
   date: string;
   excerpt: string;
   readingTime: string;
+  tags: string[]; // Added tags array
   contentHtml?: string;
 }
 
@@ -42,11 +43,22 @@ async function parseDocx(fullPath: string): Promise<{ data: Partial<PostData>; c
   if (match) {
     try {
       const yamlContent = match[1];
-      const data = yaml.load(yamlContent) as Partial<PostData>;
+      // FIX: Use a Record type instead of 'any'
+      const data = yaml.load(yamlContent) as Record<string, unknown>;
       contentHtml = contentHtml.replace(/^[\s\S]*?---[\s\S]*?---/, '');
 
+      // Safely handle the tags string conversion
+      const rawTags = data.tags as string | undefined;
+      const tags = rawTags ? rawTags.split(',').map((t) => t.trim()) : [];
+
       return {
-        data: { ...data, readingTime },
+        data: { 
+          title: data.title as string | undefined,
+          date: data.date as string | undefined,
+          excerpt: data.excerpt as string | undefined,
+          tags, 
+          readingTime 
+        },
         contentHtml
       };
     } catch (e) {
@@ -57,7 +69,8 @@ async function parseDocx(fullPath: string): Promise<{ data: Partial<PostData>; c
   return {
     data: { 
       title: path.basename(fullPath).replace(/\.docx$/, '').replace(/-/g, ' '),
-      readingTime 
+      readingTime,
+      tags: [] 
     },
     contentHtml
   };
@@ -77,11 +90,14 @@ export async function getSortedPostsData(): Promise<PostData[]> {
         if (fileName.endsWith('.md')) {
           const fileContents = fs.readFileSync(fullPath, 'utf8');
           const { data, content } = matter(fileContents);
+          const tags = data.tags ? data.tags.split(',').map((t: string) => t.trim()) : [];
+          
           return { 
             id, 
             title: (data.title as string) || id,
             date: (data.date as string) || '',
             excerpt: (data.excerpt as string) || '',
+            tags,
             readingTime: calculateReadingTime(content)
           };
         }
@@ -92,6 +108,7 @@ export async function getSortedPostsData(): Promise<PostData[]> {
           title: data.title || id,
           date: data.date || '',
           excerpt: data.excerpt || '',
+          tags: data.tags || [],
           readingTime: data.readingTime || '1 min read'
         };
       })
@@ -112,6 +129,7 @@ export async function getPostData(id: string): Promise<PostData> {
       title: data.title || id,
       date: data.date || '',
       excerpt: data.excerpt || '',
+      tags: data.tags || [],
       readingTime: data.readingTime || '1 min read'
     };
   }
@@ -119,6 +137,7 @@ export async function getPostData(id: string): Promise<PostData> {
   const fileContents = fs.readFileSync(mdPath, 'utf8');
   const { data, content } = matter(fileContents);
   const processedContent = await remark().use(html).process(content);
+  const tags = data.tags ? data.tags.split(',').map((t: string) => t.trim()) : [];
 
   return {
     id,
@@ -126,6 +145,7 @@ export async function getPostData(id: string): Promise<PostData> {
     title: (data.title as string) || id,
     date: (data.date as string) || '',
     excerpt: (data.excerpt as string) || '',
+    tags,
     readingTime: calculateReadingTime(content)
   };
 }

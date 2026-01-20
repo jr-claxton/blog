@@ -40,16 +40,27 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
 
       <article className="max-w-3xl mx-auto px-6 pb-24">
         <header className="mb-12">
-          <div className="flex items-center space-x-2 text-sm text-slate-400 mb-4">
-            <time dateTime={postData.date}>{postData.date}</time>
-            <span>•</span>
-            <span>{postData.readingTime}</span> 
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 leading-tight">
-            {postData.title}
-          </h1>
-        </header>
+  <div className="flex flex-wrap gap-2 mb-4">
+    {postData.tags.map((tag) => (
+      <span 
+        key={tag}
+        className="px-2 py-1 text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 rounded-md"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
+  
+  <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 leading-tight">
+    {postData.title}
+  </h1>
+  
+  <div className="flex items-center space-x-2 text-sm text-slate-400 mt-4">
+    <time>{postData.date}</time>
+    <span>•</span>
+    <span>{postData.readingTime}</span> 
+  </div>
+</header>
 
         <div className="prose prose-slate lg:prose-xl mx-auto antialiased">
   {/* The container div here allows our CSS selectors to find the first <p> correctly */}
