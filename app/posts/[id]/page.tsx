@@ -1,3 +1,5 @@
+import BackToTop from '@/app/components/BackToTop';
+import ScrollProgress from '@/app/components/ScrollProgress';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -28,6 +30,8 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
 
   return (
     <main className="min-h-screen bg-slate-50/50">
+      <ScrollProgress />
+      <BackToTop />
       <nav className="max-w-3xl mx-auto px-6 py-8">
         <Link href="/" className="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">
           ← Back to Writing
@@ -47,10 +51,10 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
           </h1>
         </header>
 
-        <div className="prose prose-slate lg:prose-xl mx-auto prose-headings:font-serif prose-blockquote:border-l-emerald-500 prose-blockquote:bg-emerald-50/50 prose-blockquote:py-1 prose-blockquote:rounded-r-lg">
-          {/* Fixed: Added a fallback empty string to satisfy TypeScript's TrustedHTML requirement */}
-          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml || '' }} />
-        </div>
+        <div className="prose prose-slate lg:prose-xl mx-auto antialiased">
+  {/* The container div here allows our CSS selectors to find the first <p> correctly */}
+  <div dangerouslySetInnerHTML={{ __html: postData.contentHtml || '' }} />
+</div>
 
         <footer className="mt-16 pt-8 border-t border-slate-200">
           <p className="text-slate-500 italic">

@@ -24,3 +24,54 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Ensure empty paragraphs from Word still take up space */
+.prose p:empty::before {
+  content: "";
+  display: inline-block;
+  height: 1em;
+}
+
+
+/* Target the generated HTML specifically */
+.prose p {
+  margin-bottom: 2.5rem !important; /* Forces 40px of space between paragraphs */
+  line-height: 1.8 !important;    /* Increases line height for better readability */
+  color: #334155;                 /* Slate-700 for a softer look than pure black */
+}
+
+/* Ensure Word's empty paragraphs don't collapse */
+.prose p:empty, 
+.prose p br {
+  display: block;
+  content: "";
+  margin-top: 2rem;
+}
+
+/* 1. The Drop Cap: Targets the very first paragraph of the post */
+.prose > div > p:first-of-type::first-letter {
+  float: left;
+  font-family: serif; /* Matches your 'Architect of Dreams' header */
+  font-size: 5rem;
+  line-height: 0.85;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-left: 3px;
+  font-weight: 700;
+  color: #0f172a; /* Slate-900 */
+}
+
+/* 2. Auto-Indentation: Indents every paragraph EXCEPT the first one */
+.prose > div > p + p {
+  text-indent: 2rem;
+  margin-top: 0 !important; /* Removes the gap between indented paragraphs for a 'book' feel */
+  margin-bottom: 0.5rem !important;
+}
+
+/* 3. Section Breaks: If you use '---' in Word, style it cleanly */
+.prose hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(16, 185, 129, 0.5), rgba(0, 0, 0, 0));
+  margin: 3rem 0;
+}
