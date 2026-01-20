@@ -7,7 +7,7 @@ export default async function Home() {
   return (
     <main className="max-w-2xl mx-auto px-6 py-12">
       <header className="mb-16">
-        <h1 className="text-4xl font-serif font-bold text-slate-900">Josh Claxton</h1>
+        <h1 className="text-4xl font-serif font-bold text-slate-900">J. R. Claxton</h1>
         <p className="text-slate-600 mt-2">Chef, writer, father.</p>
       </header>
 

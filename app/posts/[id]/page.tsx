@@ -39,7 +39,7 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center space-x-2 text-sm text-slate-400 mb-4">
             <time dateTime={postData.date}>{postData.date}</time>
             <span>•</span>
-            <span>5 min read</span> 
+            <span>{postData.readingTime}</span> 
           </div>
           
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 leading-tight">
