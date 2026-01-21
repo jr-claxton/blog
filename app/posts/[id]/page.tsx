@@ -19,7 +19,7 @@ export async function generateMetadata(
   const post = await getPostData(id);
 
   return {
-    title: `${post.title} | Josh Claxton`,
+    title: `${post.title} | J. R. Claxton`,
     description: post.excerpt,
   };
 }
